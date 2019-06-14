@@ -1,14 +1,14 @@
-language: go
+dist: trusty
 
-go:
-  - "1.12.6"
-
-services: 
-  - docker
-
-install:
-  - make image-dev #build
-
-script:
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password -stdin
-  - make push-dev #push
+jobs:
+  include:
+    - stage: build docker image
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker build -t gocrawler .
+        - docker images
+        - docker tag gocrawler $DOCKER_USERNAME/gocrawler
+        - docker push $DOCKER_USERNAME/gocrawler
+    - stage: test
+      script: docker run --rm $DOCKER_USERNAME/gocrawler cat hello.txt
+    - script: docker run --rm $DOCKER_USERNAME/gocrawler cat hello.txt
