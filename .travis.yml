@@ -9,6 +9,3 @@ jobs:
         - docker images
         - docker tag gocrawler $DOCKER_USERNAME/gocrawler
         - docker push $DOCKER_USERNAME/gocrawler
-    - stage: test
-      script: docker run --rm $DOCKER_USERNAME/gocrawler cat hello.txt
-    - script: docker run --rm $DOCKER_USERNAME/gocrawler cat hello.txt
